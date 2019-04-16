@@ -1,12 +1,21 @@
 class Api::V1::MoviesController < ApplicationController
-  skip_before_action :authorized, only: [:create, :index]
+  skip_before_action :authorized, only: [:index]
   before_action :api_key
 
   def index
-    render json: Tmdb::Discover.movie.results
-  end
+    discover = Tmdb::Discover.movie.results
+    upcoming = Tmdb::Movie.upcoming.results
+    now_playing = Tmdb::Movie.now_playing.results
+    popular = Tmdb::Movie.popular.results
+    top_rated = Tmdb::Movie.top_rated.results
 
-  def create
+    render json: {
+      discover: discover,
+      upcoming: upcoming,
+      nowPlaying: now_playing,
+      popular: popular,
+      topRated: top_rated
+    }
   end
 
   private
@@ -14,9 +23,5 @@ class Api::V1::MoviesController < ApplicationController
   def api_key
     Tmdb::Api.key(Rails.application.credentials.tmdb_key)
   end
-  
-  #   def movie_params
-  #     params.require(:movie).permit(:)
-  #   end
 
 end
