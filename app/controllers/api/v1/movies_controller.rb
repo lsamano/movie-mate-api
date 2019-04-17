@@ -1,5 +1,5 @@
 class Api::V1::MoviesController < ApplicationController
-  skip_before_action :authorized, only: [:index]
+  skip_before_action :authorized, only: [:index, :show]
   before_action :api_key
 
   def index
@@ -16,6 +16,11 @@ class Api::V1::MoviesController < ApplicationController
       popular: popular,
       topRated: top_rated
     }
+  end
+
+  def show
+    @movie = Tmdb::Movie.detail(params[:id])
+    render json: @movie
   end
 
   private

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
       post '/login', to: 'auth#create'
       get '/profile', to: 'users#profile'
 
-      resources :movies, only: [:index]
+      resources :movies, only: [:index, :show]
     end
   end
 end
